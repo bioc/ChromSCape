@@ -34,6 +34,8 @@ size of 1000bp) so that no original bins are counted twice. (500)}
 \item{ref}{Reference genome to use (hg38)}
 
 \item{nthreads}{Number of threads to use for paralell processing}
+
+\item{rebin_function}{A function to use to rebin the matrix.}
 }
 \value{
 A sparse matrix of larger bins or peaks.

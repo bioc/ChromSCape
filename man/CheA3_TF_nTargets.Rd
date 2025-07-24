@@ -11,6 +11,10 @@ CheA3_TF_nTargets - a data.frame with 1632 rows (unique TFs) and
 \usage{
 data("CheA3_TF_nTargets")
 }
+\value{
+A  CheA3_TF_nTargets - a data.frame with 1632 rows (unique TFs) and
+2 columns
+}
 \description{
 This data.frame was obtained by downloading datasets from ChEA3 database
 (https://maayanlab.cloud/chea3/) and merging targets for :
@@ -26,7 +30,6 @@ This data.frame was obtained by downloading datasets from ChEA3 database
 \examples{
 data("CheA3_TF_nTargets")
 head(CheA3_TF_nTargets)
-
 }
 \references{
 Keenan AB, Torre D, Lachmann A, Leong AK, Wojciechowicz M, Utti V,

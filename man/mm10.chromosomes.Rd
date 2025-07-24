@@ -15,6 +15,9 @@ mm10.chromosomes - a data frame with 24 chromosomes and 3 variables:
 \usage{
 data("mm10.chromosomes")
 }
+\value{
+mm10.chromosomes - a data frame with 24 chromosomes and 3 variables
+}
 \description{
 This data frame provides the length of each "canonical" chromosomes of
 Mus Musculus (Mouse) genome build mm10.

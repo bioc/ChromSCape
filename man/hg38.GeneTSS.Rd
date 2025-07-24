@@ -17,6 +17,9 @@ hg38.GeneTSS - a data frame with 32,937 genes and 5 variables:
 \usage{
 data("hg38.GeneTSS")
 }
+\value{
+hg38.GeneTSS - a data frame with 32,937 genes and 5 variables
+}
 \description{
 This dataframe was extracted from Gencode v25 and report the Transcription
 Start Site of each gene in the Homo Sapiens genome build hg38.

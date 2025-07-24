@@ -11,6 +11,9 @@ scExp - a SingleCellExperiment with 106 cells and 5499 features
 \usage{
 data("scExp")
 }
+\value{
+A  scExp - a SingleCellExperiment with 106 cells and 5499 features
+}
 \description{
 Data from a single-cell ChIP-seq experiment against H3K4me3 active mark from
 two cell lines, Jurkat B cells and Ramos T cells from Grosselin et al., 2019.
@@ -42,5 +45,6 @@ plot_reduced_dim_scExp(scExp,color_by = "cell_cluster")
 plot_heatmap_scExp(scExp)
 plot_differential_volcano_scExp(scExp,  "C1")
 plot_differential_summary_scExp(scExp)
+
 }
 \keyword{datasets}

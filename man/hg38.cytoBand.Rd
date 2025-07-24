@@ -16,6 +16,9 @@ hg38.cytoBand - a data frame with 862 cytobands and 4 variables:
 \usage{
 data("hg38.cytoBand")
 }
+\value{
+hg38.cytoBand - a data frame with 862 cytobands and 4 variables.
+}
 \description{
 This data frame provides the location of each cytoBands of
 Homo Sapiens genome build hg38.

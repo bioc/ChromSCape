@@ -17,8 +17,11 @@ ce11.GeneTSS - a data frame with 20,051 genes and 5 variables:
 \usage{
 data("ce11.GeneTSS")
 }
+\value{
+ce11.GeneTSS - a data frame with 20,051 genes and 5 variables
+}
 \description{
 This dataframe was extracted from Gencode v25 and report the Transcription
-Start Site of each gene in the Homo Sapiens genome build ce11
+Start Site of each gene in the C Elegans genome build ce11
 }
 \keyword{datasets}

@@ -17,6 +17,9 @@ mm10.GeneTSS - a data frame with 27,916 genes and 5 variables:
 \usage{
 data("mm10.GeneTSS")
 }
+\value{
+mm10.GeneTSS - a data frame with 27,916 genes and 5 variables
+}
 \description{
 This dataframe was extracted from Gencode v25 and report the Transcription
 Start Site of each gene in the Mus Musculus genome build mm10 (Mouse).

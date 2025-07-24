@@ -11,6 +11,7 @@
 #'   \item{start}{Start of the chromosome (bp) - integer}
 #'   \item{end}{End of the chromosome (bp) - integer}
 #' }
+#' @return hg38.chromosomes - a data frame with 24 rows and 3 variables.
 "hg38.chromosomes"
 
 #' Data.frame of cytoBandlocation - hg38
@@ -27,6 +28,7 @@
 #'   \item{end}{End of the chromosome (bp) - integer}
 #'   \item{cytoBand}{Name of the cytoBand - character}
 #' }
+#' @return hg38.cytoBand - a data frame with 862 cytobands and 4 variables.
 "hg38.cytoBand"
 
 #' Data.frame of cytoBandlocation - mm10
@@ -43,6 +45,7 @@
 #'   \item{end}{End of the chromosome (bp) - integer}
 #'   \item{cytoBand}{Name of the cytoBand - character}
 #' }
+#' @return mm10.cytoBand - a data frame with 403 cytobands and 4 variables.
 "mm10.cytoBand"
 
 #' Data.frame of chromosome length - mm10
@@ -58,6 +61,7 @@
 #'   \item{start}{Start of the chromosome (bp) - integer}
 #'   \item{end}{End of the chromosome (bp) - integer}
 #' }
+#' @return mm10.chromosomes - a data frame with 24 chromosomes and 3 variables
 "mm10.chromosomes"
 
 #' Data.frame of gene TSS - hg38
@@ -75,6 +79,7 @@
 #'   \item{Gene}{Gene symbol - character}
 #'   \item{Strand}{Strand - character}
 #' }
+#' @return  hg38.GeneTSS - a data frame with 32,937 genes and 5 variables
 "hg38.GeneTSS"
 
 #' Data.frame of gene TSS - mm10
@@ -92,12 +97,13 @@
 #'   \item{Gene}{Gene symbol - character}
 #'   \item{Strand}{Strand - character}
 #' }
+#' @return  mm10.GeneTSS - a data frame with 27,916 genes and 5 variables
 "mm10.GeneTSS"
 
 #' Data.frame of chromosome length - ce11
 #' 
 #' This data frame provides the length of each "canonical" chromosomes of
-#'  Homo Sapiens genome build ce11. 
+#' C Elegans genome build ce11. 
 #'
 #' @usage data("ce11.chromosomes")
 #'
@@ -107,12 +113,13 @@
 #'   \item{start}{Start of the chromosome (bp) - integer}
 #'   \item{end}{End of the chromosome (bp) - integer}
 #' }
+#' @return ce11.chromosomes - a data frame with 7 chromosomes and 3 variables
 "ce11.chromosomes"
 
 #' Data.frame of gene TSS - ce11
 #'
 #' This dataframe was extracted from Gencode v25 and report the Transcription
-#' Start Site of each gene in the Homo Sapiens genome build ce11
+#' Start Site of each gene in the C Elegans genome build ce11
 #' 
 #' @usage data("ce11.GeneTSS")
 #' 
@@ -124,6 +131,8 @@
 #'   \item{Gene}{Gene symbol - character}
 #'   \item{strand}{Srand - character}
 #' }
+#' 
+#' @return ce11.GeneTSS - a data frame with 20,051 genes and 5 variables
 "ce11.GeneTSS"
 
 #' A SingleCellExperiment outputed by ChromSCape
@@ -160,6 +169,8 @@
 #' plot_heatmap_scExp(scExp)
 #' plot_differential_volcano_scExp(scExp,  "C1")
 #' plot_differential_summary_scExp(scExp)
+#' 
+#' @return A  scExp - a SingleCellExperiment with 106 cells and 5499 features
 "scExp"
 
 #' A data.frame with the number of targets of each TF in ChEA3 
@@ -191,5 +202,7 @@
 #' @examples
 #' data("CheA3_TF_nTargets")
 #' head(CheA3_TF_nTargets)
+#' @return A  CheA3_TF_nTargets - a data.frame with 1632 rows (unique TFs) and 
+#' 2 columns
 #' 
 "CheA3_TF_nTargets"

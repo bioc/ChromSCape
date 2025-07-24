@@ -15,6 +15,9 @@ hg38.chromosomes - a data frame with 24 rows and 3 variables:
 \usage{
 data("hg38.chromosomes")
 }
+\value{
+hg38.chromosomes - a data frame with 24 rows and 3 variables.
+}
 \description{
 This data frame provides the length of each "canonical" chromosomes of
 Homo Sapiens genome build hg38.

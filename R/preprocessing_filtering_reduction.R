@@ -291,7 +291,7 @@ read_sparse_matrix <- function(files_dir_list,
 #'  BPPARAM set in your R session.
 #'  
 #' @return A sparse matrix of features x cells
-#' @source 
+#' 
 #' @references Stuart el al.,  Multimodal single-cell chromatin analysis with 
 #' Signac bioRxiv \url{https://doi.org/10.1101/2020.11.09.373613}
 #' @importFrom IRanges IRanges
@@ -861,11 +861,11 @@ beds_to_matrix_indexes <- function(dir, which,
 #' Rebin Helper for rebin_matrix function
 #'
 #' @param mat_df A data.frame corresponding to sparse matrix indexes & values.
-#'
+#' @importFrom dplyr group_by summarise mutate bind_rows
 #' @return a data.frame grouped mean-summarised  by col and new_row
 #' 
 rebin_helper = function(mat_df){
-  library(dplyr)
+
   mat_df_grouped = mat_df %>% dplyr::group_by(col, new_row) %>%
     dplyr::summarise(new_value = sum(origin_value))
 }
@@ -898,6 +898,7 @@ rebin_helper = function(mat_df){
 #' takes predecency over bin_width.
 #' @param verbose Verbose
 #' @param nthreads Number of threads to use for paralell processing
+#' @param rebin_function A function to use to rebin the matrix.
 #'
 #' @return A sparse matrix of larger bins or peaks.
 #' @export

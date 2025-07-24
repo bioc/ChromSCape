@@ -15,8 +15,11 @@ ce11.chromosomes - a data frame with 7 chromosomes and 3 variables:
 \usage{
 data("ce11.chromosomes")
 }
+\value{
+ce11.chromosomes - a data frame with 7 chromosomes and 3 variables
+}
 \description{
 This data frame provides the length of each "canonical" chromosomes of
-Homo Sapiens genome build ce11.
+C Elegans genome build ce11.
 }
 \keyword{datasets}

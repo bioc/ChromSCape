@@ -16,6 +16,9 @@ mm10.cytoBand - a data frame with 403 cytobands and 4 variables:
 \usage{
 data("mm10.cytoBand")
 }
+\value{
+mm10.cytoBand - a data frame with 403 cytobands and 4 variables.
+}
 \description{
 This data frame provides the location of each cytoBands of
 Homo Sapiens genome build mm10.

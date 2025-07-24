@@ -687,13 +687,13 @@ load_MSIGdb <- function(ref,
             " MSigDB gene sets."
         )
     )
-    columns = c("gs_name", "gs_cat", "gene_symbol")
+    columns = c("gs_name", "gs_collection", "gene_symbol")
     if (ref == "hg38")
-        GeneSetsDf = msigdbr::msigdbr("Homo sapiens")[, columns]
+        GeneSetsDf = msigdbr::msigdbr(species = "Homo sapiens")[, columns]
     if (ref == "mm10")
-        GeneSetsDf = msigdbr::msigdbr("Mus musculus")[, columns]
+        GeneSetsDf = msigdbr::msigdbr(species = "Mus musculus")[, columns]
     if (ref == "ce11")
-      GeneSetsDf = msigdbr::msigdbr("Caenorhabditis elegans")[, columns]
+      GeneSetsDf = msigdbr::msigdbr(species = "Caenorhabditis elegans")[, columns]
     colnames(GeneSetsDf) = c("Gene.Set", "Class", "Genes")
     system.time({
         GeneSetsDf <- GeneSetsDf %>% dplyr::group_by(
