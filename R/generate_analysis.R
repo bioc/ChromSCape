@@ -163,7 +163,7 @@ generate_analysis <- function(input_data_folder,
       overlap = ceiling(mean((end - start) / 2))
       message("Rebinning the sparse matrix into ", feature_count_on, " with parameter ", feature_count_parameter, " and overlap of ", overlap)
       message("Saving raw matrix for later usage for coverage or additional feature engineering...")
-      qs::qsave(datamatrix, file.path(ChromSCape_directory, "raw_mat.qs"))
+    qs2::qs_save(datamatrix, file.path(ChromSCape_directory, "raw_mat.qs2"))
 
       if(feature_count_on == "bins") {
         datamatrix = rebin_matrix(datamatrix,
@@ -178,8 +178,8 @@ generate_analysis <- function(input_data_folder,
 
     }
     annot_raw = out$annot_raw
-    qs::qsave(datamatrix, file = file.path(ChromSCape_directory, "datamatrix.qs"))
-    qs::qsave(annot_raw, file = file.path(ChromSCape_directory, "annot_raw.qs"))
+    qs2::qs_save(datamatrix, file = file.path(ChromSCape_directory, "datamatrix.qs2"))
+    qs2::qs_save(annot_raw, file = file.path(ChromSCape_directory, "annot_raw.qs2"))
     
     # Check that number of cells and features is enough or finish here
     n_cell = ncol(datamatrix)
@@ -245,9 +245,9 @@ generate_analysis <- function(input_data_folder,
     }
     rm(annot_raw, datamatrix)
     gc()
-    qs::qsave(scExp, file = file.path(ChromSCape_directory,
+    qs2::qs_save(scExp, file = file.path(ChromSCape_directory,
                                       "Filtering_Normalize_Reduce",
-                                      paste0(prefix, ".qs")))
+                                      paste0(prefix, ".qs2")))
     
     #### Correlation Filtering & Clustering ####
     if("cluster" %in% run) {
@@ -291,9 +291,9 @@ generate_analysis <- function(input_data_folder,
         scExp_cf = choose_cluster_scExp(scExp_cf, nclust = nclust, consensus = 'consensus' %in% run)
         
         data = list("scExp_cf" = scExp_cf)
-        qs::qsave(data, file = file.path(ChromSCape_directory,
+        qs2::qs_save(data, file = file.path(ChromSCape_directory,
                                          "correlation_clustering",
-                                         paste0(prefix,".qs")))
+                                         paste0(prefix,".qs2")))
         rm(data)
         gc()
     }
@@ -314,7 +314,7 @@ generate_analysis <- function(input_data_folder,
             names(input) = basename(sample_folders)
             } else {
               format = "raw_mat"
-              input = qs::qread(file.path(ChromSCape_directory, "raw_mat.qs"))
+                            input = qs2::qs_read(file.path(ChromSCape_directory, "raw_mat.qs2"))
             }
             coverage_dir_nclust = file.path(ChromSCape_directory,
                                             "coverage", paste0(prefix, "_k", nclust))
@@ -370,11 +370,11 @@ generate_analysis <- function(input_data_folder,
             GeneSetClasses = MSIG.classes)
         
         data = list("scExp_cf" = scExp_cf)
-        qs::qsave(data,
+        qs2::qs_save(data,
                   file = file.path(ChromSCape_directory,
                                    "Diff_Analysis_Gene_Sets",
                                    paste0(prefix,"_",nclust,"_",qval.th,"_",
-                                          logFC.th,"_","one_vs_rest",".qs")))
+                                          logFC.th,"_","one_vs_rest",".qs2")))
         rm(data)
         rm(scExp_cf)
         gc()
@@ -397,14 +397,14 @@ generate_analysis <- function(input_data_folder,
     message("ChromSCape::generate_analysis - Done ! ...")
     message("ChromSCape::generate_analysis - finished complete analysis in ",
             round(time_analysis[3]/60,2), " minutes...")
-    scExp = qs::qread(file = file.path(ChromSCape_directory,
+    scExp = qs2::qs_read(file = file.path(ChromSCape_directory,
                                        "Filtering_Normalize_Reduce",
-                                       paste0(prefix, ".qs")))
+                                       paste0(prefix, ".qs2")))
     gc()
-    scExp_cf = qs::qread(file.path(ChromSCape_directory,
+    scExp_cf = qs2::qs_read(file.path(ChromSCape_directory,
                                    "Diff_Analysis_Gene_Sets",
                                    paste0(prefix,"_",nclust,"_",qval.th,"_",
-                                          logFC.th,"_","one_vs_rest",".qs")))$scExp_cf
+                                          logFC.th,"_","one_vs_rest",".qs2")))$scExp_cf
     gc()
     out = list("scExp" = scExp, "scExp_cf" = scExp_cf)
     return(out)
@@ -703,7 +703,7 @@ generate_report <- function(ChromSCape_directory,
     ref_genome = read.table(file = file.path(ChromSCape_directory, "annotation.txt"))
     
     analysis_name = basename(ChromSCape_directory)
-    datamatrix = qs::qread(file.path(ChromSCape_directory, "datamatrix.qs"))
+    datamatrix = qs2::qs_read(file.path(ChromSCape_directory, "datamatrix.qs2"))
     
     if("filter" %in% run)
         scExp_files = list.files(file.path(filt_dir), full.names = TRUE) else 
@@ -719,15 +719,15 @@ generate_report <- function(ChromSCape_directory,
                 recursive = FALSE, full.names = TRUE) else coverage_dirs = ""
     
     if(!is.null(prefix)){
-        scExp = qs::qread(scExp_files[grep(prefix,scExp_files)][1])
-        scExp_cf = qs::qread(
+        scExp = qs2::qs_read(scExp_files[grep(prefix,scExp_files)][1])
+        scExp_cf = qs2::qs_read(
             scExp_cf_files[grep(prefix,scExp_cf_files)][1])$scExp_cf
         coverage_dir_nclust = coverage_dirs[grep(prefix,coverage_dirs)][1]
         coverages = sapply(list.files(coverage_dir_nclust,".bw",
                                       full.names = TRUE), rtracklayer::import)
     } else{
-        scExp = qs::qread(scExp_files[1])
-        scExp_cf = qs::qread(scExp_cf_files[1])$scExp_cf
+        scExp = qs2::qs_read(scExp_files[1])
+        scExp_cf = qs2::qs_read(scExp_cf_files[1])$scExp_cf
         coverage_dir_nclust = coverage_dirs[1]
         coverages = sapply(list.files(coverage_dir_nclust,".bw",
                                       full.names = TRUE), rtracklayer::import)

@@ -60,7 +60,7 @@ Imports:
     stringdist,
     stringr,
     fs,
-    qs,
+    qs2,
     DT,
     scran,
     scater,
@@ -91,6 +91,6 @@ Imports:
     matrixTests,
     DelayedArray
 Depends: 
-    R (>= 4.1)
+    R (>= 4.6)
 LinkingTo: 
     Rcpp

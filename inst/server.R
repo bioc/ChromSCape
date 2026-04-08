@@ -85,13 +85,13 @@ shinyServer(function(input, output, session) {
     
     get.available.reduced.datasets <- function(selected_analysis){
         list.files(path = file.path(init$data_folder, "ChromSCape_analyses", selected_analysis,"Filtering_Normalize_Reduce"), full.names = FALSE, recursive = TRUE,
-                   pattern="[[:print:]]+_[[:digit:]]+_[[:digit:]]+(.[[:digit:]]+)?_[[:digit:]]+(.[[:digit:]]+)?_(uncorrected|batchCorrected).qs")
+                   pattern="[[:print:]]+_[[:digit:]]+_[[:digit:]]+(.[[:digit:]]+)?_[[:digit:]]+(.[[:digit:]]+)?_(uncorrected|batchCorrected).qs2")
         
     }
     get.available.alternative.datasets <- function(selected_analysis){
-        gsub(".qs$","",gsub("^datamatrix_","",list.files(path = file.path(init$data_folder, "ChromSCape_analyses", selected_analysis),
+        gsub(".qs2$","",gsub("^datamatrix_","",list.files(path = file.path(init$data_folder, "ChromSCape_analyses", selected_analysis),
                                                          full.names = FALSE, recursive = FALSE,
-                                                         pattern="datamatrix_.*.qs")
+                                                         pattern="datamatrix_.*.qs2")
         ))
     }
     
@@ -593,9 +593,9 @@ shinyServer(function(input, output, session) {
             }
             
             if(input$add_to_current_analysis){
-                qs::qsave(datamatrix, file = file.path(init$data_folder, 
+                qs2::qs_save(datamatrix, file = file.path(init$data_folder, 
                                                        "ChromSCape_analyses", input$selected_analysis,
-                                                       paste0("datamatrix_",alt_name(),".qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                                                       paste0("datamatrix_",alt_name(),".qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                 updateRadioButtons(
                     inputId = "feature_select",
                     choices = c("main", get.available.alternative.datasets(input$selected_analysis))
@@ -603,8 +603,8 @@ shinyServer(function(input, output, session) {
                 alt_name("")
                 shinyWidgets::updateMaterialSwitch(session = session, inputId = "add_to_current_analysis", value = FALSE)
             } else{
-                qs::qsave(datamatrix, file = file.path(init$data_folder, "ChromSCape_analyses", input$new_analysis_name, "datamatrix.qs"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
-                qs::qsave(annot_raw, file = file.path(init$data_folder, "ChromSCape_analyses", input$new_analysis_name, "annot_raw.qs"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                qs2::qs_save(datamatrix, file = file.path(init$data_folder, "ChromSCape_analyses", input$new_analysis_name, "datamatrix.qs2"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                qs2::qs_save(annot_raw, file = file.path(init$data_folder, "ChromSCape_analyses", input$new_analysis_name, "annot_raw.qs2"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                 init$available_analyses <- list.dirs(path = file.path(init$data_folder, "ChromSCape_analyses"), full.names = FALSE, recursive = FALSE)
                 updateSelectInput(session = session, inputId = "selected_analysis",
                                   label =  "Select an Analysis:",
@@ -614,9 +614,9 @@ shinyServer(function(input, output, session) {
                 init$datamatrix <- datamatrix
                 init$annot_raw <- annot_raw
                 
-                if(!is.null(raw_mat)) qs::qsave(raw_mat, file = file.path(init$data_folder, 
+                if(!is.null(raw_mat)) qs2::qs_save(raw_mat, file = file.path(init$data_folder, 
                                                                           "ChromSCape_analyses", input$new_analysis_name,
-                                                                          paste0("raw_mat.qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                                                                          paste0("raw_mat.qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                 rm(raw_mat)
                 gc()
             }
@@ -637,7 +637,7 @@ shinyServer(function(input, output, session) {
     
     output$download_scExp <- downloadHandler(
         filename = function() {
-            paste('scExp_', gsub(":| |-", "_", gsub(":.. ", "",Sys.time())), '.qs', sep='')
+            paste('scExp_', gsub(":| |-", "_", gsub(":.. ", "",Sys.time())), '.qs2', sep='')
         },
         content = function(con) {
             if(!is.null(scExp_cf())){
@@ -645,7 +645,7 @@ shinyServer(function(input, output, session) {
             } else {
                 scExp. = isolate(scExp())
             }
-            qs::qsave(scExp., con)
+            qs2::qs_save(scExp., con)
         }
     )
     
@@ -688,8 +688,8 @@ shinyServer(function(input, output, session) {
             if(!is.null(input$selected_analysis) && input$selected_analysis != ""){
                 if(input$feature_select != "main"){
                     if(input$feature_select %in% get.available.alternative.datasets(input$selected_analysis)) {
-                        init$datamatrix <- qs::qread(file.path(init$data_folder, "ChromSCape_analyses", input$selected_analysis,
-                                                               paste0("datamatrix_",input$feature_select,".qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                        init$datamatrix <- qs2::qs_read(file.path(init$data_folder, "ChromSCape_analyses", input$selected_analysis,
+                                                               paste0("datamatrix_",input$feature_select,".qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                     } else{
                         updateRadioButtons(
                             inputId = "feature_select",
@@ -697,8 +697,8 @@ shinyServer(function(input, output, session) {
                         )
                     }
                 } else{
-                    init$datamatrix <- qs::qread(file.path(init$data_folder, "ChromSCape_analyses", input$selected_analysis, "datamatrix.qs"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
-                    init$annot_raw <-  qs::qread(file.path(init$data_folder, "ChromSCape_analyses", input$selected_analysis, "annot_raw.qs"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                    init$datamatrix <- qs2::qs_read(file.path(init$data_folder, "ChromSCape_analyses", input$selected_analysis, "datamatrix.qs2"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                    init$annot_raw <-  qs2::qs_read(file.path(init$data_folder, "ChromSCape_analyses", input$selected_analysis, "annot_raw.qs2"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                 }
                 
             }
@@ -762,10 +762,10 @@ shinyServer(function(input, output, session) {
             init$annot_raw <- annot_raw
             init$datamatrix <- datamatrix
             
-            qs::qsave(datamatrix, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "datamatrix.qs"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
-            qs::qsave(annot_raw, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "annot_raw.qs"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+            qs2::qs_save(datamatrix, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "datamatrix.qs2"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+            qs2::qs_save(annot_raw, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "annot_raw.qs2"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
             
-            if(length(list.files(file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "correlation_clustering"), pattern = ".qs"))>0){
+            if(length(list.files(file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "correlation_clustering"), pattern = ".qs2"))>0){
                 showNotification(paste0("Please re-run analysis from filtering in order to rename downstream analysis."),
                                  duration = 15, closeButton = TRUE, type="warning")
                 
@@ -944,7 +944,7 @@ shinyServer(function(input, output, session) {
             filename_sel <- file.path(init$data_folder, "ChromSCape_analyses", analysis_name(),"Filtering_Normalize_Reduce",init$available_reduced_datasets[file_index])
             
             t1 = system.time({
-                scExp. = qs::qread(filename_sel, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                scExp. = qs2::qs_read(filename_sel, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                 if(is.reactive(scExp.)) {
                     scExp. = isolate(scExp.())
                 }
@@ -1007,7 +1007,7 @@ shinyServer(function(input, output, session) {
         if(!is.na(file_index)){
           scExp(NULL)
           t1 = system.time({
-            scExp. = qs::qread(filename_sel, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                        scExp. = qs2::qs_read(filename_sel, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
             if(is.reactive(scExp.)) {
               scExp. = isolate(scExp.())
             }
@@ -1376,9 +1376,9 @@ shinyServer(function(input, output, session) {
         
         scExp(colors_scExp(scExp(), annotCol = input$color_by, color_by = input$color_by, color_df = color_df))
         
-        qs::qsave(getMainExperiment(scExp()), file = file.path(init$data_folder, "ChromSCape_analyses",
+        qs2::qs_save(getMainExperiment(scExp()), file = file.path(init$data_folder, "ChromSCape_analyses",
                                                                analysis_name(), "Filtering_Normalize_Reduce",
-                                                               paste0(input$selected_reduced_dataset,".qs")),
+                                       paste0(input$selected_reduced_dataset,".qs2")),
                   nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
         
         rm(color_df)
@@ -1459,12 +1459,12 @@ shinyServer(function(input, output, session) {
                          gc()
                          file = file.path(init$data_folder, "ChromSCape_analyses",
                                           analysis_name(), "correlation_clustering",
-                                          paste0(selected_filtered_dataset(),".qs"))
+                                          paste0(selected_filtered_dataset(),".qs2"))
                          print(file)
                          if(file.exists(file)){
                              if(is.null(scExp_cf())){
                                  cat("Loading scExp_cf - ", selected_filtered_dataset(),"...\n")
-                                 data = qs::qread(file, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                                 data = qs2::qs_read(file, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                                  scExp_cf(data$scExp_cf)
                                  rm(data)
                                  gc()
@@ -1627,18 +1627,18 @@ shinyServer(function(input, output, session) {
         gc()
         file = file.path(init$data_folder, "ChromSCape_analyses",
                          analysis_name(), "correlation_clustering",
-                         paste0(selected_filtered_dataset(),".qs"))
+                         paste0(selected_filtered_dataset(),".qs2"))
         # if(!file.exists(file)){
             data = list("scExp_cf" = getMainExperiment(scExp_cf()))
-            qs::qsave(data, file=file, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+            qs2::qs_save(data, file=file, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
             rm(data)
             gc()
         # }
         
-        if(file.exists(file.path(odir,"refined_annotation.qs"))){
+        if(file.exists(file.path(odir,"refined_annotation.qs2"))){
             # Loading refined peak annotation
             scExp_cf. = scExp_cf()
-            scExp_cf.@metadata[["refined_annotation"]] = qs::qread(file = file.path(odir, "refined_annotation.qs"))
+            scExp_cf.@metadata[["refined_annotation"]] = qs2::qs_read(file = file.path(odir, "refined_annotation.qs2"))
             scExp_cf(scExp_cf.)
             rm(scExp_cf.)
         } else{
@@ -1791,8 +1791,8 @@ shinyServer(function(input, output, session) {
             gc()
             incProgress(amount=0.2, detail=paste("Saving"))
             data = list("scExp_cf" = getMainExperiment(scExp_cf()))
-            qs::qsave(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "correlation_clustering",
-                                             paste0(input$selected_reduced_dataset, ".qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+            qs2::qs_save(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "correlation_clustering",
+                                             paste0(input$selected_reduced_dataset, ".qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
             incProgress(amount=0.2, detail=paste("Finished"))
             rm(data)
             gc()
@@ -1883,8 +1883,8 @@ shinyServer(function(input, output, session) {
         gc()
         progress$set(value = 0.7)
         data = list("scExp_cf" = getMainExperiment(scExp_cf()))
-        qs::qsave(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "correlation_clustering",
-                                         paste0(input$selected_reduced_dataset, ".qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+        qs2::qs_save(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "correlation_clustering",
+                         paste0(input$selected_reduced_dataset, ".qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
         rm(data)
         gc()
         clust$clust_pdf <- NULL  # needed in order to update the pdf output
@@ -2248,7 +2248,7 @@ shinyServer(function(input, output, session) {
     raw_mat_generated <- reactive({
         req(init$data_folder, analysis_name())
         odir <- file.path(init$data_folder, "ChromSCape_analyses", analysis_name())
-        ifelse("raw_mat.qs" %in% list.files(odir),TRUE,FALSE)
+        ifelse("raw_mat.qs2" %in% list.files(odir),TRUE,FALSE)
     })
     
     coverage_folder_ui <- renderUI({
@@ -2314,7 +2314,7 @@ shinyServer(function(input, output, session) {
         
         if(raw_mat_generated()){
 
-            raw_mat =  qs::qread(file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "raw_mat.qs"))
+            raw_mat =  qs2::qs_read(file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "raw_mat.qs2"))
             generate_coverage_tracks(scExp_cf = scExp_cf(),
                                      input = raw_mat,
                                      odir = odir,
@@ -2371,7 +2371,7 @@ shinyServer(function(input, output, session) {
             scExp_cf(scExp_cf.)
             rm(scExp_cf.)
             gc()
-            qs::qsave(refined_annotation, file = file.path(odir, "refined_annotation.qs"))
+            qs2::qs_save(refined_annotation, file = file.path(odir, "refined_annotation.qs2"))
             
         }
     })
@@ -2659,7 +2659,7 @@ shinyServer(function(input, output, session) {
     #             
     #             # Export rowRanges as peaks
     #             refined_annotation = scExp_cf()@metadata$refined_annotation
-    #             qs::qsave(refined_annotation, file = file.path(odir, "refined_annotation.qs"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+    #             qs2::qs_save(refined_annotation, file = file.path(odir, "refined_annotation.qs2"), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
     #             
     #             pc$new <- Sys.time()
     #             updateActionButton(session, "do_pc", label="Finished successfully", icon = icon("check-circle"))
@@ -2706,7 +2706,7 @@ shinyServer(function(input, output, session) {
     })
     
     DA_GSA_datasets <- reactive({
-        if (is.null(init$available_DA_GSA_datasets)) c() else gsub('.{3}$', '', basename(init$available_DA_GSA_datasets)) })
+        if (is.null(init$available_DA_GSA_datasets)) c() else sub("\\.qs2$", "", basename(init$available_DA_GSA_datasets)) })
     
     output$selected_DA_GSA_dataset <- renderUI({ 
         selectInput("selected_DA_GSA_dataset", "Select set with Differential Analysis:",
@@ -2737,7 +2737,7 @@ shinyServer(function(input, output, session) {
                                   analysis_name(),"Diff_Analysis_Gene_Sets",
                                   init$available_DA_GSA_datasets[file_index])
         t1 = system.time({
-            data = qs::qread(filename_sel, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+            data = qs2::qs_read(filename_sel, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
             scExp_cf(NULL)
             if(input$feature_select %in% getExperimentNames(data$scExp_cf))
                 scExp_cf. = swapAltExp_sameColData(data$scExp_cf,input$feature_select) else
@@ -2796,10 +2796,10 @@ shinyServer(function(input, output, session) {
     #        length(input$selected_DA_GSA_dataset) > 0){
     #       
     #       filename <- file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
-    #                             paste0(input$selected_DA_GSA_dataset, ".qs"))
+    #                             paste0(input$selected_DA_GSA_dataset, ".qs2"))
     #       cat(filename,"\n")
     #       if(file.exists(filename)){
-    #         data = qs::qread(filename, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+    #         data = qs2::qs_read(filename, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
     #         
     #         if(input$feature_select %in% getExperimentNames(data$scExp_cf))
     #           scExp_cf. = swapAltExp_sameColData(data$scExp_cf,input$feature_select) else
@@ -2922,9 +2922,9 @@ shinyServer(function(input, output, session) {
                                                              gsub("[^[:alnum:]|_]","",input$name_ref))
         
         suffix = paste0(selected_filtered_dataset(), "_", length(unique(scExp_cf()$cell_cluster)),
-                        "_", input$qval.th, "_", input$logFC.th, "_", DA_GSA_suffix, ".qs")
+                "_", input$qval.th, "_", input$logFC.th, "_", DA_GSA_suffix, ".qs2")
         
-        qs::qsave(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
+        qs2::qs_save(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
                                          suffix), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
         rm(data)
         gc()
@@ -2933,7 +2933,7 @@ shinyServer(function(input, output, session) {
         updateSelectInput(session = session, inputId = "selected_DA_GSA_dataset",
                           label =  "Select set with Differential Analysis:",
                           choices = DA_GSA_datasets(),
-                          selected =  gsub(".qs$","",suffix))
+                          selected =  gsub(".qs2$","",suffix))
         
         updateActionButton(session = session, inputId = "run_DA", label = "Start analysis ", icon = icon("check-circle"))
         updateActionButton(session = session, inputId = "apply_DA_filters", label = "Apply filters")
@@ -2959,9 +2959,9 @@ shinyServer(function(input, output, session) {
                                                                           gsub("[^[:alnum:]|_]","",input$name_ref))
                      
                      suffix = paste0(selected_filtered_dataset(), "_", length(unique(scExp_cf()$cell_cluster)),
-                                     "_", input$qval.th, "_", input$logFC.th, "_", DA_GSA_suffix, ".qs")
+                                     "_", input$qval.th, "_", input$logFC.th, "_", DA_GSA_suffix, ".qs2")
                      
-                     qs::qsave(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
+                     qs2::qs_save(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
                                                       suffix), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
                      rm(data)
                      gc()
@@ -2970,7 +2970,7 @@ shinyServer(function(input, output, session) {
                      updateSelectInput(session = session, inputId = "selected_DA_GSA_dataset",
                                        label =  "Select set with Differential Analysis:",
                                        choices = DA_GSA_datasets(),
-                                       selected =  gsub(".qs$","",suffix))
+                                       selected =  gsub(".qs2$","",suffix))
                      updateActionButton(session = session, inputId = "apply_DA_filters", label = "Saved ", icon = icon("check-circle"))
                      
                  })
@@ -3208,8 +3208,8 @@ shinyServer(function(input, output, session) {
         progress$inc(detail='Finished Gene Set Analysis - Saving...', amount = 0.0)
         data = list("scExp_cf" = getMainExperiment(scExp_cf()) )
         
-        qs::qsave(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
-                                         paste0(input$selected_DA_GSA_dataset, ".qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+        qs2::qs_save(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
+                         paste0(input$selected_DA_GSA_dataset, ".qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
         rm(data)
         gc()
         progress$inc(detail='Done !', amount = 0.5)
@@ -3521,8 +3521,8 @@ shinyServer(function(input, output, session) {
         progress$inc(detail='Finished TF Analysis - Saving...', amount = 0.0)
         data = list("scExp_cf" = getMainExperiment(scExp_cf()) )
         
-        qs::qsave(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
-                                         paste0(input$selected_DA_GSA_dataset, ".qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+        qs2::qs_save(data, file = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(), "Diff_Analysis_Gene_Sets",
+                         paste0(input$selected_DA_GSA_dataset, ".qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
         rm(data)
         gc()
         progress$inc(detail='Done !', amount = 0.1)
@@ -3685,9 +3685,9 @@ shinyServer(function(input, output, session) {
         
         if(!is.null(scExp()) & !is.null(input$selected_reduced_dataset)){
             scExp = isolate(getMainExperiment(scExp()))
-            qs::qsave(scExp, file = file.path(init$data_folder, "ChromSCape_analyses",
+            qs2::qs_save(scExp, file = file.path(init$data_folder, "ChromSCape_analyses",
                                               analysis_name(), "Filtering_Normalize_Reduce",
-                                              paste0(input$selected_reduced_dataset,".qs")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                                              paste0(input$selected_reduced_dataset,".qs2")), nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
             
         }
         if(!is.null(scExp_cf()) & !is.null(selected_filtered_dataset())){
@@ -3701,15 +3701,15 @@ shinyServer(function(input, output, session) {
                                        selected_filtered_dataset(), "_",
                                        length(unique(scExp_cf()$cell_cluster)),
                                        "_", input$qval.th, "_", input$logFC.th, "_",
-                                       input$de_type, ".qs"))
+                                       input$de_type, ".qs2"))
                 } else{
                     dir = file.path(init$data_folder, "ChromSCape_analyses", analysis_name(),
                                     "correlation_clustering",
                                     paste0(selected_filtered_dataset(), 
-                                           ".qs"))
+                                           ".qs2"))
                 }
                 scExp = getMainExperiment(scExp)
-                qs::qsave(scExp, file = dir, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
+                qs2::qs_save(scExp, file = dir, nthreads = as.numeric(BiocParallel::bpworkers(CS_options.BPPARAM())))
             } 
             
         }

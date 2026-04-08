@@ -22,7 +22,7 @@
 #' @importFrom shinydashboardPlus dashboardHeader dashboardPage dashboardSidebar
 #' dashboardControlbar controlbarMenu controlbarItem dropdownBlock
 #' @importFrom colourpicker updateColourInput colourInput
-#' @importFrom qs qread qload qsave
+#' @importFrom qs2 qs_read qs_save
 #' @importFrom Rcpp evalCpp
 #' @useDynLib ChromSCape
 NULL

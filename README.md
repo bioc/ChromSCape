@@ -9,7 +9,7 @@ Nat Commun 11, 5702 (2020).](https://www.nature.com/articles/s41467-020-19542-x)
 
 ## Launching ChromSCape 
 
-**ChromSCape** requires **R version 4.02**.
+**ChromSCape** requires **R >= 4.6** (Bioconductor 3.23).
 To install **ChromSCape**, open **R** or **Rstudio** and run the following commands : 
 
 ```

@@ -154,25 +154,25 @@ Module_preprocessing_filtering_and_reduction <- function(
                 data_folder(), "ChromSCape_analyses", raw_dataset_name(), 
                 "Filtering_Normalize_Reduce", paste0(
                     paste(raw_dataset_name(), min_cov_cell(), n_top_features(), 
-                          quant_removal(), batch_string, sep = "_"), ".qs")))
+                          quant_removal(), batch_string, sep = "_"), ".qs2")))
             
             # total counts as 'counts_main'
             colData_Exp <- SummarizedExperiment::colData(scExp)[,grep("total_counts", colnames(SummarizedExperiment::colData(scExp)))][,1:2]
             colnames(colData_Exp) <- gsub("total_counts",paste0("counts_", feature_select()),colnames(colData_Exp))
             SummarizedExperiment::colData(scExp) = cbind(SummarizedExperiment::colData(scExp), colData_Exp)
             
-            qs::qsave(
+            qs2::qs_save(
                 scExp, file = file.path(
                     data_folder(), "ChromSCape_analyses", raw_dataset_name(), 
                     "Filtering_Normalize_Reduce", paste0(
                         paste(raw_dataset_name(), min_cov_cell(), n_top_features(), 
-                              quant_removal(), batch_string, sep = "_"), ".qs"))
+                              quant_removal(), batch_string, sep = "_"), ".qs2"))
         )
         } else{
             print("Saving :")
             print(file.path(
                 data_folder(), "ChromSCape_analyses", raw_dataset_name(), 
-                "Filtering_Normalize_Reduce",paste0(prefix(), ".qs")))
+                "Filtering_Normalize_Reduce",paste0(prefix(), ".qs2")))
             
             colData_altExp <- SummarizedExperiment::colData(scExp)[,grep("total_counts",colnames(SummarizedExperiment::colData(scExp)))][,1:2]
             colnames(colData_altExp) <- gsub("total_counts",paste0("counts_",feature_select()),colnames(colData_altExp))
@@ -188,10 +188,10 @@ Module_preprocessing_filtering_and_reduction <- function(
                SummarizedExperiment::colData(scExp)[,!already_present]
             SummarizedExperiment::colData(scExp) = cbind(SummarizedExperiment::colData(scExp), colData_altExp)
             SummarizedExperiment::colData(SingleCellExperiment::altExp(scExp, feature_select())) = NULL
-            qs::qsave(
+            qs2::qs_save(
                 scExp, file = file.path(
                     data_folder(), "ChromSCape_analyses", raw_dataset_name(), 
-                    "Filtering_Normalize_Reduce", paste0(prefix(), ".qs")))
+                    "Filtering_Normalize_Reduce", paste0(prefix(), ".qs2")))
         }
         gc()
         print("Filtering & Reduction done !")

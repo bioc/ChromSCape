@@ -35,7 +35,7 @@
     chromosome to PCA.
     
     * Restructuration of the ChromSCape directory & faster reading/saving of 
-    S4 objects using package 'qs'.
+    S4 objects using package 'qs2'.
     
     
 ## Minor Changes
