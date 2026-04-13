@@ -40,7 +40,8 @@ Imports:
     shinyFiles,
     shinyhelper,
     shinyWidgets,
-    shinydashboardPlus,
+    shinydashboardPlus
+    flexdashboard,
     shinycssloaders,
     Matrix,
     plotly,
